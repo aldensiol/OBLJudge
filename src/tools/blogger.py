@@ -1,9 +1,10 @@
 import os
-from typing import List, Dict, Any
+import re
 
 from dotenv import load_dotenv
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from typing import List, Dict, Any
 
 load_dotenv()
 
@@ -92,6 +93,11 @@ class BloggerCrawler:
         except HttpError as e:
             raise Exception(f"failed to search posts: {e}")
 
+    def get_outbound_links(self, content: str) -> List[str]:
+        """extract outbound links from a post's content"""
+        links = re.findall(r'href=["\'](http[s]?://[^"\']+)["\']', content)
+        return links
+
     def get_all_posts(self, blog_id: str, max_results: int = 3) -> List[Dict]:
         """
         get all posts from a blog using pagination
@@ -117,14 +123,14 @@ class BloggerCrawler:
                 if not page_token:
                     break
 
+            for idx, post in enumerate(all_posts):
+                all_posts[idx] = {
+                    "title": post.get("title"),
+                    "published": post.get("published"),
+                    "updated": post.get("updated"),
+                    "content": post.get("content"),
+                    "outbound_links": self.get_outbound_links(post.get("content", "")),
+                }
             return all_posts
         except HttpError as e:
             raise Exception(f"failed to fetch all posts: {e}")
-
-    def parse_post(self, post: Dict[str, Any]):
-        return {
-            "title": post.get("title"),
-            "published": post.get("published"),
-            "updated": post.get("updated"),
-            "content": post.get("content"),
-        }
