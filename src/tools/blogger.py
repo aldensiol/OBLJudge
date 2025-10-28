@@ -94,9 +94,28 @@ class BloggerCrawler:
             raise Exception(f"failed to search posts: {e}")
 
     def get_outbound_links(self, content: str) -> List[str]:
-        """extract outbound links from a post's content"""
-        links = re.findall(r'href=["\'](http[s]?://[^"\']+)["\']', content)
-        return links
+        """extract outbound links from a post's content, excluding images"""
+        anchor_links = re.findall(
+            r'<a\s+[^>]*href=["\'](http[s]?://[^"\']+)["\']', content
+        )
+        # filter out image urls
+        image_extensions = (
+            ".jpg",
+            ".jpeg",
+            ".png",
+            ".gif",
+            ".bmp",
+            ".svg",
+            ".webp",
+            ".ico",
+        )
+        filtered_links = [
+            link
+            for link in anchor_links
+            if not link.lower().endswith(image_extensions)
+            and "googleusercontent.com/img/" not in link
+        ]
+        return filtered_links
 
     def get_all_posts(self, blog_id: str, max_results: int = 3) -> List[Dict]:
         """
