@@ -1,5 +1,5 @@
 import os
-from typing import List, Dict, Optional
+from typing import List, Dict, Any
 
 from dotenv import load_dotenv
 from googleapiclient.discovery import build
@@ -120,3 +120,11 @@ class BloggerCrawler:
             return all_posts
         except HttpError as e:
             raise Exception(f"failed to fetch all posts: {e}")
+
+    def parse_post(self, post: Dict[str, Any]):
+        return {
+            "title": post.get("title"),
+            "published": post.get("published"),
+            "updated": post.get("updated"),
+            "content": post.get("content"),
+        }
