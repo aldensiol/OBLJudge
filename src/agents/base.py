@@ -1,7 +1,7 @@
 import base64
 import httpx
 
-from abc import ABC, abstractmethod
+from abc import ABC
 from pydantic import BaseModel
 from pydantic_ai import (
     Agent,
@@ -215,7 +215,3 @@ class BaseAgent(ABC):
         except Exception as e:
             self.logger.error(f"{e}")
             return ""
-
-    @abstractmethod
-    async def execute(self, state):
-        raise NotImplementedError("")
