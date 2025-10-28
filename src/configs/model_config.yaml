@@ -1,0 +1,84 @@
+models:
+  gpt-5o-mini:
+    provider: "openai"
+    model_name: "gpt-5o-mini"
+    temperature: 0.5
+    max_tokens: 8192
+    top_p: 1.0
+    frequency_penalty: 0.0
+    presence_penalty: 0.0
+    image_detail: "auto"
+    max_images: 20
+    supported_formats: ["png", "jpeg", "jpg", "webp", "gif", "svg"]
+    max_image_size: "50MB"
+
+  gpt-5o:
+    provider: "openai"
+    model_name: "gpt-5o"
+    temperature: 0.5
+    max_tokens: 4096
+    top_p: 1.0
+    frequency_penalty: 0.0
+    presence_penalty: 0.0
+    image_detail: "auto"
+    max_images: 10
+    supported_formats: ["png", "jpeg", "jpg", "webp", "gif"]
+    max_image_size: "20MB"
+
+  gemini-2.5-flash:
+    provider: "google-gla"
+    model_name: "gemini-2.5-flash"
+    temperature: 0.5
+    max_tokens: 65536
+    top_p: 0.95
+    top_k: 64
+    candidate_count: 1
+    safety_settings:
+      harassment: "BLOCK_MEDIUM_AND_ABOVE"
+      hate_speech: "BLOCK_MEDIUM_AND_ABOVE"
+      sexually_explicit: "BLOCK_MEDIUM_AND_ABOVE"
+      dangerous_content: "BLOCK_MEDIUM_AND_ABOVE"
+
+  gemini-2.5-flash-lite:
+    provider: "google-gla"
+    model_name: "gemini-2.5-flash-lite"
+    temperature: 0.5
+    max_tokens: 65536
+    top_p: 0.9
+    top_k: 64
+    candidate_count: 1
+    safety_settings:
+      harassment: "BLOCK_MEDIUM_AND_ABOVE"
+      hate_speech: "BLOCK_MEDIUM_AND_ABOVE"
+      sexually_explicit: "BLOCK_MEDIUM_AND_ABOVE"
+      dangerous_content: "BLOCK_MEDIUM_AND_ABOVE"
+
+  gemini-2.5-flash-image-preview:
+    provider: "google-gla"
+    model_name: "gemini-2.5-flash-image-preview"
+    temperature: 0.6
+    guidance_scale: 7.5
+    num_inference_steps: 50
+    seed: null  
+    output_format: "png"
+
+global:
+  timeout: 30  # seconds
+  retry_attempts: 3
+  retry_delay: 1  # seconds
+  rate_limit:
+    requests_per_minute: 60
+    tokens_per_minute: 150000
+  
+providers:
+  openai:
+    base_url: "https://api.openai.com/v1"
+    api_version: "2024-02-01"
+    headers:
+      "User-Agent": "VLM-Config/1.0"
+      
+  google-gla:
+    base_url: "https://generativelanguage.google-glaapis.com/v1beta"
+    api_version: "v1beta"
+    headers:
+      "User-Agent": "VLM-Config/1.0"
