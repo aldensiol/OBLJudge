@@ -95,9 +95,13 @@ class BloggerCrawler:
 
     def get_outbound_links(self, content: str) -> List[str]:
         """extract outbound links from a post's content, excluding images"""
+        # find links in href attributes
         anchor_links = re.findall(
             r'<a\s+[^>]*href=["\'](http[s]?://[^"\']+)["\']', content
         )
+
+        all_links = list(set(anchor_links))
+
         # filter out image urls
         image_extensions = (
             ".jpg",
@@ -111,7 +115,7 @@ class BloggerCrawler:
         )
         filtered_links = [
             link
-            for link in anchor_links
+            for link in all_links
             if not link.lower().endswith(image_extensions)
             and "googleusercontent.com/img/" not in link
         ]
