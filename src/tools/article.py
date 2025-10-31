@@ -154,10 +154,6 @@ class ArticleCrawler:
                 "title": article.title,
                 "authors": article.authors,
             }
-
-            self.logger.info(
-                f"extracted - title: {article.title}, publish: {publish_date}, update: {update_date}"
-            )
             return result
 
         except Exception as e:
@@ -170,3 +166,33 @@ class ArticleCrawler:
                 "title": None,
                 "authors": [],
             }
+
+    def format_links_data_into_string(self, article_data: Dict[str, Any]) -> str:
+        """
+        formats scraped article data into a structured string for LLM consumption.
+        """
+        section_parts = [
+            "=== Article ===",
+            f"URL: {article_data.get('url', 'N/A')}",
+            f"Title: {article_data.get('title', 'N/A')}",
+        ]
+
+        authors = article_data.get("authors", [])
+        if authors:
+            section_parts.append(f"Authors: {', '.join(authors)}")
+        else:
+            section_parts.append("Authors: N/A")
+
+        section_parts.append(f"Published: {article_data.get('publish_date', 'N/A')}")
+
+        update_date = article_data.get("update_date")
+        if update_date:
+            section_parts.append(f"Last Updated: {update_date}")
+
+        content = article_data.get("content")
+        if content:
+            section_parts.append(f"\nContent:\n{content}")
+        else:
+            section_parts.append("\nContent: [No content available]")
+
+        return "\n" + "\n".join(section_parts) + "\n"

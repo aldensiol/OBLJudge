@@ -13,8 +13,11 @@ class LinkMetrics(BaseModel):
     source_credibility: MetricScore = Field(
         ..., description="Credibility of the source domain and content quality"
     )
+    diversity_of_sources: MetricScore = Field(
+        ..., description="Publication date and unique domain diversity across all links"
+    )
     recency_and_currency: MetricScore = Field(
-        ..., description="Publication date recency from content metadata"
+        ..., description="Number of unique domains among all outbound links"
     )
     anchor_text_quality: MetricScore = Field(
         ...,
@@ -31,9 +34,6 @@ class LinkMetrics(BaseModel):
     )
     contextual_value_contribution: MetricScore = Field(
         ..., description="Actual informational value from the linked content"
-    )
-    link_necessity: MetricScore = Field(
-        ..., description="Whether the link is necessary for the article"
     )
 
 
